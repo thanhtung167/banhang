@@ -8,7 +8,8 @@ const Oders =sequelize.define('Oders',{
     allowNull:false
   },
   total_amount:{
-    type:DataTypes.BIGINT
+    type:DataTypes.BIGINT,
+    
   }
 
   

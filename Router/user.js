@@ -5,17 +5,18 @@ const userController = require('../Controller/user')
 // const checkLogout = require("../middleware/checkLogout");
 // const check = require("../middleware/checkToken");
 const Check = require('../middleware/checkToken');
-
+const CheckRole = require('../middleware/checkRole');
+const Checkrole = require('../middleware/checkRole');
 
 router.post('/singup',userController.newUser)
 router.route('/singin').post(userController.Login)
-router.route('/refresh-token').post(userController.refreshtoken)
+router.route('/refresh').post(userController.refreshtoken)
 router.use('/',Check)
 
 //!Users
-router.route('/Users').get(userController.getAllUser)
+router.route('/Users').get(Checkrole,userController.getAllUser)
 router.route('/Users/edit/:id_user').put(userController.editUser)
-router.route('/Users/remove/:id_user').put(userController.removeUser)
+router.route('/Users/remove/:id_user').put(Checkrole,userController.removeUser)
 
 //!Category
 router.route('/categorys/new').post(userController.newCategory)

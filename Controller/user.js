@@ -29,31 +29,25 @@ Unit.hasOne(Products)
 Products.belongsTo(Unit);
 
 let tokenList = {};
-const encodeToken = (userID) =>{
+const encodeToken = (userID,role) =>{
   return JWT.sign({
     iss:"TT",
-    sub:userID,
+    sub:{userID,role},
     iat:new Date().getTime(),
     exp:new Date().setDate(new Date().getDate() + 1),
   },'thanhtung')
 }
-const encodeTokenfresh = (userID) =>{
+const encodeTokenfresh = (userID,role) =>{
   return JWT.sign({
     iss:"TT",
-    sub:userID,
+    sub:{userID,role},
     iat:new Date().getTime(),
     exp:new Date().setDate(new Date().getDate() + 10),
   },'thanhtung')
 }
 const verifyToken =(token,secretKey)=>{
-  return new Promise((resolve, reject) => {
-    JWT.verify(token, secretKey, (error, decoded) => {
-      if (error) {
-        return reject(error);
-      }
-      resolve(decoded);
-    });
-  });
+    JWT.verify(token, secretKey);
+
 }
 const refreshtoken = async (req,res)=>{
 
@@ -61,12 +55,12 @@ const refreshtoken = async (req,res)=>{
   const refreshTokenFromClient = req.body.refreshToken;
   if (refreshTokenFromClient && (tokenList[refreshTokenFromClient])) {
     try {
-      const decoded = await verifyToken(refreshTokenFromClient,'thanhtung')
+      const decoded = await JWT.verify(refreshTokenFromClient,'thanhtung')
       console.log(decoded)
     const userData = decoded.sub;
     console.log("userdata" + userData)
 
-    const accessToken = encodeToken(userData._id)
+    const accessToken = encodeToken(userData.user_id,userData.role)
     return res.status(200).json({accessToken});
     } catch (error) {
       res.status(403).json({
@@ -91,11 +85,12 @@ const newUser = async function(req,res,next){
   const user_address = req.body.user_address;
   const user_phone = req.body.user_phone;
   const user_password = req.body.password;
+  const role = req.body.role
   const foundUser =  await User.findOne({where:{user_email:user_email}})
     if(foundUser !== null) return res.json({messenger:"Tài khoản đã tồn tại "})
 
     
-     await User.create({user_name:user_name,user_email:user_email,user_password:user_password,user_address:user_address,user_phone:user_phone,user_fullname:user_fullname}).then((user)=>{
+     await User.create({user_name:user_name,user_email:user_email,user_password:user_password,user_address:user_address,user_phone:user_phone,user_fullname:user_fullname,role:role}).then((user)=>{
       return res.status(201).json({user})
      }).catch((err)=>{
        next(err)
@@ -105,7 +100,7 @@ const Login = async function(req,res){
   const user_email = req.body.user_email;
   const user_password = req.body.password;
   const user =  await User.findAll({where:{user_email:user_email,user_password:user_password},raw:true})
-  
+  console.log(user)
     // console.log(tokenList)
    if(user.length <= 0){
     return  res.json({result:"Sai tên đăng nhập hoặc mật khẩu "}) 
@@ -114,8 +109,8 @@ const Login = async function(req,res){
    return res.json({result:"Sai tên đăng nhập hoặc mật khẩu"})
   }
       //encode Token
-      const token = encodeToken(user[0].id);
-      const refreshToken = encodeTokenfresh(user[0].id);
+      const token = encodeToken(user[0].user_id,user[0].role);
+      const refreshToken = encodeTokenfresh(user[0].user_id,user[0].role);
       // Lưu lại 2 mã access & Refresh token, với key chính là cái refreshToken để đảm bảo unique và không sợ hacker sửa đổi dữ liệu truyền lên.
         tokenList[refreshToken] = {token, refreshToken};
   if (user.length>0) {

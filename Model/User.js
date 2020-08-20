@@ -25,6 +25,12 @@ const Users =sequelize.define('Users',{
   },
   user_fullname:{
     type:DataTypes.STRING,
+  },
+  role:{
+    type:DataTypes.BOOLEAN,
+    allowNull:false,
+    defaultValue: false,
+
   }
   
 },{
