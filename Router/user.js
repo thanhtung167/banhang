@@ -12,28 +12,28 @@ router.route('/singin').post(userController.Login)
 router.route('/refresh-token').post(userController.refreshtoken)
 router.use('/',Check)
 //!Category
-router.route('/category/new').post(userController.newCategory)
-router.route('/:id_category/remove').post(userController.removeCategory)
-router.route('/:id_category/edit').put(userController.editCategory)
+router.route('/categorys/new').post(userController.newCategory)
+router.route('/categorys/remove/:id_category').post(userController.removeCategory)
+router.route('/categorys/edit/:id_category').put(userController.editCategory)
 
 //!Unit
-router.route('/unit/new').post(userController.newUnit)
-router.route('/:id_unit/edit-unit').put(userController.editUnit)
-router.route('/:id_unit/remove-unit').post(userController.removeUnit)
+router.route('/units/new').post(userController.newUnit)
+router.route('/units/edit/:id_unit').put(userController.editUnit)
+router.route('/units/remove/:id_unit').post(userController.removeUnit)
 
 //!Product
-router.route('/product').get(userController.getAllProduct)
-router.route('/product/new').post(userController.newProduct)
-router.route('/:id_product/edit-product').put(userController.editProduct)
-router.route('/:id_product/remove-product').delete(userController.removeProduct)
+router.route('/products').get(userController.getAllProduct)
+router.route('/products/new').post(userController.newProduct)
+router.route('/products/edit/:id_product').put(userController.editProduct)
+router.route('/products/remove/:id_product').delete(userController.removeProduct)
 
 
 //!Oder
 router.route('/oders').get(userController.getAllODer)
-router.route('/oder/new').post(userController.newOder)
-router.route('/oder/:id').get(userController.getDetailOder)
-router.route('/oder-edit/:id').put(userController.editODer)
-router.route('/remove-oder/:id').delete(userController.deleteOder)
+router.route('/oders/new').post(userController.newOder)
+router.route('/oders/:id').get(userController.getDetailOder)
+router.route('/oders/edit/:id').put(userController.editODer)
+router.route('/oders/remove/:id').delete(userController.deleteOder)
 
 
 

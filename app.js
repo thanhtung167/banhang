@@ -24,7 +24,7 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/users',UserRouter)
+app.use('/',UserRouter)
 
 //Catch 404
 app.use((req,res,next)=>{
