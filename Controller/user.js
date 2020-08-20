@@ -126,6 +126,48 @@ const Login = async function(req,res){
       
 }
 
+const getAllUser = async(req,res,next) => {
+  await User.findAll({attributes:{exclude:['user_password']}}).then((users)=>{
+    res.json({users:users})
+  }).catch((err)=>{
+    next(err)
+  })
+}
+const editUser = async(req,res,next)=>{
+  const user_email = req.body.user_email;
+  const user_fullname = req.body.fullname;
+  const user_name = req.body.user_name;
+  const user_address = req.body.user_address;
+  const user_phone = req.body.user_phone;
+  const user_password = req.body.password;
+await Users.update({user_email,user_fullname,user_name,user_address,user_phone,user_password},{returning: true,where:{
+  user_id:req.params.id_User
+}}).then(([ rowsUpdate, [updatedUser] ])=>{
+  res.json(updatedUser)
+}).catch(err=>{
+  next(err)
+})
+}
+
+const removeUser = async(req,res,next)=>{
+  const { id_user } = req.params
+
+  await Category.destroy({
+    where:{
+      user_id:id_user
+    }
+  }).then((deleteRecord)=>{
+    if (deleteRecord===1) {
+      res.status(200).json({mes:"Success"})
+    } else {
+      res.status(404).json({mes:"record not found"})
+    }
+  }).catch((error)=>{
+    next(error)
+  }
+  )
+}
+
 const newCategory = async function(req,res,next){
   const  cat_name  = req.body.name
   const FindCate = await  Category.findAll({
@@ -369,5 +411,5 @@ const  deleteOder = async (req,res,next) =>{
 
 module.exports = {
   Login, newUser, newCategory, newProduct, removeCategory, encodeToken ,encodeTokenfresh,verifyToken,refreshtoken,editODer
-  ,editCategory,newUnit,editUnit,removeUnit,getAllProduct,editProduct,removeProduct,newOder,getAllODer,getDetailOder,deleteOder
+  ,editCategory,newUnit,editUnit,removeUnit,getAllProduct,editProduct,removeProduct,newOder,getAllODer,getDetailOder,deleteOder,getAllUser,editUser,removeUser
 }

@@ -11,6 +11,12 @@ router.post('/singup',userController.newUser)
 router.route('/singin').post(userController.Login)
 router.route('/refresh-token').post(userController.refreshtoken)
 router.use('/',Check)
+
+//!Users
+router.route('/Users').get(userController.getAllUser)
+router.route('/Users/edit/:id_user').put(userController.editUser)
+router.route('/Users/remove/:id_user').put(userController.removeUser)
+
 //!Category
 router.route('/categorys/new').post(userController.newCategory)
 router.route('/categorys/remove/:id_category').post(userController.removeCategory)
