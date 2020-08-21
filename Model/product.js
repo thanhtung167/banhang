@@ -11,10 +11,10 @@ const Products =sequelize.define('Products',{
     type:DataTypes.STRING,
   },
   prd_price:{
-    type:DataTypes.STRING,
+    type:DataTypes.INTEGER,
   },
   prd_price_import:{
-    type:DataTypes.STRING,
+    type:DataTypes.INTEGER,
   },
   prd_details:{
     type:DataTypes.STRING,
