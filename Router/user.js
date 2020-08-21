@@ -1,9 +1,6 @@
 const express = require('express');
 const router = require("express-promise-router")()
 const userController = require('../Controller/user')
-// const checkLogin = require("../middleware/checkLogin");
-// const checkLogout = require("../middleware/checkLogout");
-// const check = require("../middleware/checkToken");
 const Check = require('../middleware/checkToken');
 const CheckRole = require('../middleware/checkRole');
 const Checkrole = require('../middleware/checkRole');
@@ -19,14 +16,14 @@ router.route('/Users/edit/:id_user').put(userController.editUser)
 router.route('/Users/remove/:id_user').put(Checkrole,userController.removeUser)
 
 //!Category
-router.route('/categorys/new').post(userController.newCategory)
-router.route('/categorys/remove/:id_category').post(userController.removeCategory)
-router.route('/categorys/edit/:id_category').put(userController.editCategory)
+router.route('/categorys/new').post(CheckRole,userController.newCategory)
+router.route('/categorys/remove/:id_category').post(CheckRole,userController.removeCategory)
+router.route('/categorys/edit/:id_category').put(CheckRole,userController.editCategory)
 
 //!Unit
-router.route('/units/new').post(userController.newUnit)
-router.route('/units/edit/:id_unit').put(userController.editUnit)
-router.route('/units/remove/:id_unit').post(userController.removeUnit)
+router.route('/units/new').post(CheckRole,userController.newUnit)
+router.route('/units/edit/:id_unit').put(CheckRole,userController.editUnit)
+router.route('/units/remove/:id_unit').post(CheckRole,userController.removeUnit)
 
 //!Product
 router.route('/products').get(userController.getAllProduct)
