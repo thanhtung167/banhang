@@ -11,19 +11,21 @@ router.route('/refresh').post(userController.refreshtoken)
 router.use('/',Check)
 
 //!Users
-router.route('/Users').get(Checkrole,userController.getAllUser)
-router.route('/Users/edit/:id_user').put(userController.editUser)
-router.route('/Users/remove/:id_user').put(Checkrole,userController.removeUser)
+router.route('/users').get(Checkrole,userController.getAllUser)
+router.route('/users/edit/:id_user').put(userController.editUser)
+router.route('/users/remove/:id_user').delete(Checkrole,userController.removeUser)
 
 //!Category
+router.route('/categorys').get(CheckRole,userController.getAllCate)
 router.route('/categorys/new').post(CheckRole,userController.newCategory)
-router.route('/categorys/remove/:id_category').post(CheckRole,userController.removeCategory)
+router.route('/categorys/remove/:id_category').delete(CheckRole,userController.removeCategory)
 router.route('/categorys/edit/:id_category').put(CheckRole,userController.editCategory)
 
 //!Unit
+router.route('/units').get(CheckRole,userController.getAllUnit)
 router.route('/units/new').post(CheckRole,userController.newUnit)
 router.route('/units/edit/:id_unit').put(CheckRole,userController.editUnit)
-router.route('/units/remove/:id_unit').post(CheckRole,userController.removeUnit)
+router.route('/units/remove/:id_unit').delete(CheckRole,userController.removeUnit)
 
 //!Product
 router.route('/products').get(userController.getAllProduct)

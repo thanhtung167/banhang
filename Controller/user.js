@@ -210,6 +210,20 @@ const removeCategory = async(req,res,next)=>{
   }
   )
 }
+const getAllCate = async function(req,res,next){
+  await Category.findAll().then((cate)=>{
+    res.json({cate})
+  }).catch((err)=>{
+    next(err)
+  })
+}
+const getAllUnit = async function(req,res,next){
+  await Unit.findAll().then((unit)=>{
+    res.json({unit})
+  }).catch((err)=>{
+    next(err)
+  })
+}
 
 
 const newUnit = async function(req,res,next){
@@ -405,6 +419,6 @@ const  deleteOder = async (req,res,next) =>{
 
 
 module.exports = {
-  Login, newUser, newCategory, newProduct, removeCategory, encodeToken ,encodeTokenfresh,verifyToken,refreshtoken,editODer
+  Login, newUser, newCategory, newProduct, removeCategory, encodeToken ,encodeTokenfresh,verifyToken,refreshtoken,editODer,getAllCate,getAllUnit
   ,editCategory,newUnit,editUnit,removeUnit,getAllProduct,editProduct,removeProduct,newOder,getAllODer,getDetailOder,deleteOder,getAllUser,editUser,removeUser
 }
