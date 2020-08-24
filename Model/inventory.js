@@ -1,30 +1,26 @@
 const sequelize = require('../config/db')
+const OderDetail = require('../Model/orderDetail')
 const { Sequelize, DataTypes } = require('sequelize');
-const Products =sequelize.define('Products',{
+const Inventory =sequelize.define('Inventory',{
   id:{
     type: DataTypes.BIGINT,
     primaryKey: true,
     autoIncrement: true,
     allowNull:false
   },
-  prd_name:{
+  unit_left:{
+    type:DataTypes.INTEGER,
+    allowNull:false,
+  },
+  address:{
     type:DataTypes.STRING,
   },
-  prd_price:{
-    type:DataTypes.INTEGER,
-  },
-  prd_price_import:{
-    type:DataTypes.INTEGER,
-  },
-  prd_details:{
-    type:DataTypes.STRING,
-  },
-  prd_img:{
-  type:DataTypes.STRING,
-  }
   
   
 },{
   timestamps: true,
+},{
+  
+  
 }) 
-module.exports = Products
+module.exports = Inventory

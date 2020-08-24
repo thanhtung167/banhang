@@ -4,6 +4,7 @@ const Category = require("../Model/category");
 const Oder = require("../Model/oder");
 const OderDetail = require("../Model/orderDetail");
 const Unit = require("../Model/Unit");
+const Inventory = require('../Model/inventory')
 const JWT = require("jsonwebtoken");
 const { Sequelize, Op, Model, DataTypes, where } = require("sequelize");
 const sequelize = require("../Config/db");
@@ -23,6 +24,7 @@ const newOder = async (req, res, next) => {
   const user_phone = req.body.user_phone;
   const user_address = req.body.user_address;
   const prd_name = req.body.prd_name;
+  const BranchId = req.body.BranchId;
 
   const findProduct = await Products.findAndCountAll({
     where: {
@@ -56,15 +58,24 @@ const newOder = async (req, res, next) => {
       ProductId,
       ship,
       OderOderId: oder.dataValues.oder_id,
+      BranchId,
       raw: true,
     });
+    const oder3 =  await Inventory.findOne({
+      where:{
+        ProductId:ProductId
+      }
+    })
+    console.log(oder3)
     const value = oder2.dataValues;
     const value2 = oder.dataValues;
+    const value3 = oder3.dataValues;
     const amountInt = parseInt(value.amount);
     const Percen = parseInt(value.discount);
     const Ship = parseInt(value.ship);
     value.total = amountInt * value.price * ((100 - Percen) / 100) - Ship;
     value2.total_amount = value.total;
+    const  unit_left = value3.unit_left - amountInt
     await oder2.save();
     await Oder.update(
       { total_amount: value.total },
@@ -74,6 +85,15 @@ const newOder = async (req, res, next) => {
         },
       }
     );
+    await Inventory.update(
+      { unit_left: unit_left },
+      {
+        where: {
+          ProductId: ProductId,
+        },
+      }
+    );
+      
     res.json({ oder2 });
   } else {
     res.json({ mes: "giá trị nhập chưa đúng" });
@@ -170,6 +190,26 @@ const deleteOder = async (req, res, next) => {
       next(err);
     });
 };
+
+const findOder = async (req,res,next) =>{
+  const BranchId = req.body.BranchId
+  await OderDetail.findAll({
+    include:{
+      model: Oder,
+      attributes: ["oder_id"],
+      include: [
+        {
+          model: User,
+          attributes: ["user_name", "user_address", "user_phone", "user_email"],
+        },
+      ],
+    }
+    ,where:{
+      BrandId:BranchId
+    }
+  })
+}
+
 //?PRODUCT-CATEGORY
 Category.hasMany(Products);
 Products.belongsTo(Category);
@@ -195,4 +235,5 @@ module.exports = {
   getDetailOder,
   editODer,
   deleteOder,
+  findOder
 };

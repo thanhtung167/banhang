@@ -5,6 +5,8 @@ const productController = require('../Controller/product')
 const unitController = require('../Controller/unit')
 const categoryController = require('../Controller/category')
 const oderController = require('../Controller/oder')
+const inventoryController = require('../Controller/inventory')
+const BranchController = require('../Controller/branch')
 const Check = require('../middleware/checkToken');
 const CheckRole = require('../middleware/checkRole');
 const Checkrole = require('../middleware/checkRole');
@@ -44,11 +46,19 @@ router.route('/oders/new').post(oderController.newOder)
 router.route('/oders/:id').get(oderController.getDetailOder)
 router.route('/oders/edit/:id').put(oderController.editODer)
 router.route('/oders/remove/:id').delete(oderController.deleteOder)
+router.route('/oders/find/').delete(oderController.findOder)
+
+//!Inventory
+router.route('/inventory/new').post(inventoryController.newProduct)
+router.route('/inventory/edit').put(inventoryController.editInventory)
+router.route('/inventory/remove').delete(inventoryController.deleteInventory)
 
 
-
-
-
+//!Branch
+router.route('/branch').get(BranchController.getallBranch)
+router.route('/branch/new').post(BranchController.newBranch)
+router.route('/branch/edit/:BranchId').put(BranchController.editbranch)
+router.route('/branch/remove/:BranchId').delete(BranchController.deleteBranch)
 
 
 

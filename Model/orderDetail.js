@@ -1,5 +1,6 @@
 const sequelize = require('../config/db')
 const { Sequelize, DataTypes } = require('sequelize');
+const Inventory = require('../Model/inventory')
 const OderDetail =sequelize.define('OderDetail',{
   amount:{
     type:DataTypes.BIGINT
@@ -29,5 +30,7 @@ const OderDetail =sequelize.define('OderDetail',{
 
 },{
   timestamps: true,
+},{
+ 
 }) 
 module.exports = OderDetail

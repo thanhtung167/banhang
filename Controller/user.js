@@ -3,7 +3,9 @@ const User = require('../Model/User')
 const Category = require('../Model/category')
 const Oder = require('../Model/oder')
 const OderDetail = require('../Model/orderDetail')
+const Inventory = require('../Model/inventory')
 const Unit = require('../Model/Unit')
+const Branch = require('../Model/branch')
 const JWT = require("jsonwebtoken");
 const { Sequelize, Op, Model, DataTypes, where } = require("sequelize");
 const sequelize = require("../Config/db");
@@ -25,6 +27,25 @@ OderDetail.belongsTo(Products);
 //?UNIT-PRODUCT
 Unit.hasOne(Products)
 Products.belongsTo(Unit);
+
+Products.hasMany(Inventory,{
+  foreignKey:{
+    name:'ProductId',
+  }
+},{onDelete:true,hook:true})
+Inventory.belongsTo(Products);
+
+Branch.hasOne(Inventory)
+Inventory.belongsTo(Branch,{
+  onDelete:true,hook:true
+});
+
+
+Branch.hasMany(OderDetail);
+OderDetail.belongsTo(Branch);
+
+
+
 
 let tokenList = {};
 const encodeToken = (userID,role) =>{

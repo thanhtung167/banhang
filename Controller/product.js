@@ -82,6 +82,8 @@ OderDetail.belongsTo(Products);
 //?UNIT-PRODUCT
 Unit.hasOne(Products)
 Products.belongsTo(Unit);
+
+
  module.exports = {
   newProduct,getAllProduct,editProduct,removeProduct
  }
