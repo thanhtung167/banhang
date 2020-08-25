@@ -76,31 +76,31 @@ const editInventory = async (req, res, next) => {
       next(err);
     });
 };
-const getUnitProduct = async (req,res,next)=>{
+const getUnitProduct = async (req, res, next) => {
   const ProductId = req.body.ProductId;
-  
-  await Inventory.findAll({
+
+  const product =  await Inventory.findOne({
     where: {
       ProductId: ProductId,
-    
-    },
-     include:{
 
-      model:Branch,
-      
-    }
-    
-    
-  }).then(product=>{
-    res.json({product})
-  }).catch(err=>{
-    next(err)
+    },
+    include: {
+      model: Branch,
+    },raw:true
   })
-}
+ const info = await Products.findOne({
+    where:{
+      id:product.ProductId
+    },
+    attributes:['prd_name']
+    ,raw:true
+  })
+  res.json({mes:product,info})
+};
 
 module.exports = {
   newProduct,
   deleteInventory,
   editInventory,
-  getUnitProduct
+  getUnitProduct,
 };
