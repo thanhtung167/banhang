@@ -11,6 +11,9 @@ const Inventory =sequelize.define('Inventory',{
   unit_left:{
     type:DataTypes.INTEGER,
     allowNull:false,
+    validate: {
+      min: 0,
+    }
   },
   address:{
     type:DataTypes.STRING,

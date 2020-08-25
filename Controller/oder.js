@@ -75,6 +75,7 @@ const newOder = async (req, res, next) => {
     const Ship = parseInt(value.ship);
     value.total = amountInt * value.price * ((100 - Percen) / 100) - Ship;
     value2.total_amount = value.total;
+    if(value3.unit_left < 1 ) return res.json({mes:"đã hết sản phẩm "})
     const unit_left = value3.unit_left - amountInt;
     await oder2.save();
     await Oder.update(

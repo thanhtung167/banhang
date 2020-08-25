@@ -8,12 +8,13 @@ const Unit = require("../Model/Unit");
 const JWT = require("jsonwebtoken");
 const { Sequelize, Op, Model, DataTypes, where } = require("sequelize");
 const sequelize = require("../Config/db");
+const { model } = require("mongoose");
+const Branch = require("../Model/branch");
 
 const newProduct = async (req, res, next) => {
   const unit_left = req.body.unit_left;
   const BranchId = req.body.BranchId;
   const ProductId = req.body.ProductId;
-  const address = req.body.address;
 
   const findProduct = await Inventory.findAll({
     where: {
@@ -75,9 +76,31 @@ const editInventory = async (req, res, next) => {
       next(err);
     });
 };
+const getUnitProduct = async (req,res,next)=>{
+  const ProductId = req.body.ProductId;
+  
+  await Inventory.findAll({
+    where: {
+      ProductId: ProductId,
+    
+    },
+     include:{
+
+      model:Branch,
+      
+    }
+    
+    
+  }).then(product=>{
+    res.json({product})
+  }).catch(err=>{
+    next(err)
+  })
+}
 
 module.exports = {
   newProduct,
   deleteInventory,
   editInventory,
+  getUnitProduct
 };
