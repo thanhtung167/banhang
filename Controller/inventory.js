@@ -79,7 +79,7 @@ const editInventory = async (req, res, next) => {
 const getUnitProduct = async (req, res, next) => {
   const ProductId = req.body.ProductId;
 
-  const product =  await Inventory.findOne({
+  const product =  await Inventory.findAll({
     where: {
       ProductId: ProductId,
 
@@ -88,9 +88,10 @@ const getUnitProduct = async (req, res, next) => {
       model: Branch,
     },raw:true
   })
+  console.log(product)
  const info = await Products.findOne({
     where:{
-      id:product.ProductId
+      id:ProductId
     },
     attributes:['prd_name']
     ,raw:true
