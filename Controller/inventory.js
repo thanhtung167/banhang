@@ -95,7 +95,7 @@ const getUnitProduct = async (req, res, next) => {
     attributes:['prd_name']
     ,raw:true
   })
-  res.json({mes:product,info})
+  res.json({mes:{...product,...info}})
 };
 
 module.exports = {
