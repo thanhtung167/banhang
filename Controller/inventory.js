@@ -80,45 +80,48 @@ const editInventory = async (req, res, next) => {
 const getUnitProduct = async (req, res, next) => {
   const ProductId = req.body.ProductId;
 
-  const product =  await Inventory.findAll({
+  const product = await Inventory.findAll({
     where: {
       ProductId: ProductId,
-
     },
     include: {
       model: Branch,
-    },raw:true
-  })
-  console.log(product)
- const info = await Products.findOne({
-    where:{
-      id:ProductId
     },
-    attributes:['prd_name']
-    ,raw:true
-  })
-  res.json({mes:{...product,...info}})
+    raw: true,
+  });
+  console.log(product);
+  const info = await Products.findOne({
+    where: {
+      id: ProductId,
+    },
+    attributes: ["prd_name"],
+    raw: true,
+  });
+  res.json({ mes: { ...product, ...info } });
 };
 const getUnitAllProduct = async (req, res, next) => {
-
-  const product =  await Inventory.findAll({
+  const product = await Inventory.findAll({
     include: {
       model: Branch,
-    },raw:true
-  })
+    },
+    raw: true,
+  });
 
+  const product2 = await Products.findAll({ raw: true });
 
-  const product2 = await Products.findAll({raw:true})
-    
-  
-  // gộp 2 mảng có value trùng nhau 
-  const product3 =product.reduce((arr,e)=>{
-      arr.push(Object.assign({},e,product2.find(item=>item.id === e.ProductId)))
-      return arr
-  },[])
+  // gộp 2 mảng có value trùng nhau
+  const product3 = product.reduce((arr, e) => {
+    arr.push(
+      Object.assign(
+        {},
+        e,
+        product2.find((item) => item.id === e.ProductId)
+      )
+    );
+    return arr;
+  }, []);
 
-  res.json({product3})
-
+  res.json({ product3 });
 };
 
 module.exports = {
@@ -126,5 +129,5 @@ module.exports = {
   deleteInventory,
   editInventory,
   getUnitProduct,
-  getUnitAllProduct
+  getUnitAllProduct,
 };
