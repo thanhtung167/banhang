@@ -98,10 +98,22 @@ const getUnitProduct = async (req, res, next) => {
   })
   res.json({mes:{...product,...info}})
 };
+const getUnitAllProduct = async (req, res, next) => {
+
+  const product =  await Inventory.findAll({
+    include: {
+      model: Branch,
+    },raw:true
+  })
+  console.log(product)
+
+  res.json({mes:product})
+};
 
 module.exports = {
   newProduct,
   deleteInventory,
   editInventory,
   getUnitProduct,
+  getUnitAllProduct
 };
