@@ -215,7 +215,7 @@ const findOder = async (req, res, next) => {
           attributes: ["user_name", "user_address", "user_phone", "user_email"],
           where: {
             user_name: {
-              [Op.like]: "%" + username + "%",
+              [Op.like]: `%${username}%`,
             }
           },
         },
