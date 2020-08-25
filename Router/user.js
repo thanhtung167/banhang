@@ -53,6 +53,7 @@ router.route('/inventory/new').post(inventoryController.newProduct)
 router.route('/inventory/edit').put(inventoryController.editInventory)
 router.route('/inventory/remove').delete(inventoryController.deleteInventory)
 router.route('/inventory/unitleft').get(inventoryController.getUnitProduct)
+router.route('/inventory/unitAllleft').get(inventoryController.getUnitAllProduct)
 
 
 //!Branch
