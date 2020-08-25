@@ -10,6 +10,7 @@ const { Sequelize, Op, Model, DataTypes, where } = require("sequelize");
 const sequelize = require("../Config/db");
 const { model } = require("mongoose");
 const Branch = require("../Model/branch");
+const { raw } = require("body-parser");
 
 const newProduct = async (req, res, next) => {
   const unit_left = req.body.unit_left;
@@ -105,9 +106,19 @@ const getUnitAllProduct = async (req, res, next) => {
       model: Branch,
     },raw:true
   })
-  console.log(product)
 
-  res.json({mes:product})
+
+  const product2 = await Products.findAll({raw:true})
+    
+  
+  // gộp 2 mảng có value trùng nhau 
+  const product3 =product.reduce((arr,e)=>{
+      arr.push(Object.assign({},e,product2.find(item=>item.id === e.ProductId)))
+      return arr
+  },[])
+
+  res.json({product3})
+
 };
 
 module.exports = {
