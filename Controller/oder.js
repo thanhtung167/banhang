@@ -4,7 +4,7 @@ const Category = require("../Model/category");
 const Oder = require("../Model/oder");
 const OderDetail = require("../Model/orderDetail");
 const Unit = require("../Model/Unit");
-const Inventory = require('../Model/inventory')
+const Inventory = require("../Model/inventory");
 const JWT = require("jsonwebtoken");
 const { Sequelize, Op, Model, DataTypes, where } = require("sequelize");
 const sequelize = require("../Config/db");
@@ -30,7 +30,7 @@ const newOder = async (req, res, next) => {
     where: {
       id: ProductId,
       prd_price: price,
-      prd_name:prd_name
+      prd_name: prd_name,
     },
   });
   const findUser = await User.findAndCountAll({
@@ -61,12 +61,12 @@ const newOder = async (req, res, next) => {
       BranchId,
       raw: true,
     });
-    const oder3 =  await Inventory.findOne({
-      where:{
-        ProductId:ProductId
-      }
-    })
-    console.log(oder3)
+    const oder3 = await Inventory.findOne({
+      where: {
+        ProductId: ProductId,
+      },
+    });
+    console.log(oder3);
     const value = oder2.dataValues;
     const value2 = oder.dataValues;
     const value3 = oder3.dataValues;
@@ -75,7 +75,7 @@ const newOder = async (req, res, next) => {
     const Ship = parseInt(value.ship);
     value.total = amountInt * value.price * ((100 - Percen) / 100) - Ship;
     value2.total_amount = value.total;
-    const  unit_left = value3.unit_left - amountInt
+    const unit_left = value3.unit_left - amountInt;
     await oder2.save();
     await Oder.update(
       { total_amount: value.total },
@@ -93,7 +93,7 @@ const newOder = async (req, res, next) => {
         },
       }
     );
-      
+
     res.json({ oder2 });
   } else {
     res.json({ mes: "giá trị nhập chưa đúng" });
@@ -191,24 +191,44 @@ const deleteOder = async (req, res, next) => {
     });
 };
 
-const findOder = async (req,res,next) =>{
-  const BranchId = req.body.BranchId
+const findOder = async (req, res, next) => {
+  const BranchId = req.body.BranchId;
+  const username = req.body.name;
+  const user_address = req.body.user_address;
+  const user_phone = req.body.user_phone;
+  const user_email = req.body.user_email;
+  const oder_id = req.body.oder_id;
+
   await OderDetail.findAll({
-    include:{
+    where: {
+      BranchId: BranchId,
+    },
+    include: {
       model: Oder,
       attributes: ["oder_id"],
+      where:{
+        oder_id:oder_id
+      },
       include: [
         {
           model: User,
           attributes: ["user_name", "user_address", "user_phone", "user_email"],
+          where: {
+            user_name: {
+              [Op.like]: "%" + username + "%",
+            }
+          },
         },
       ],
-    }
-    ,where:{
-      BrandId:BranchId
-    }
+    },
   })
-}
+    .then((oder) => {
+      res.json({ oder });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
 
 //?PRODUCT-CATEGORY
 Category.hasMany(Products);
@@ -235,5 +255,5 @@ module.exports = {
   getDetailOder,
   editODer,
   deleteOder,
-  findOder
+  findOder,
 };

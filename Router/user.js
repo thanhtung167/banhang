@@ -46,7 +46,7 @@ router.route('/oders/new').post(oderController.newOder)
 router.route('/oders/:id').get(oderController.getDetailOder)
 router.route('/oders/edit/:id').put(oderController.editODer)
 router.route('/oders/remove/:id').delete(oderController.deleteOder)
-router.route('/oders/find/').delete(oderController.findOder)
+router.route('/oder/find').get(oderController.findOder)
 
 //!Inventory
 router.route('/inventory/new').post(inventoryController.newProduct)
